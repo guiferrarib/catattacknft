@@ -20,7 +20,7 @@ import {
 	getScore,
 	levelUpEvent,
 	miaowedEvent,
-} from "../thirdweb/84532/0x5ca3b8e5b82d826af6e8e9ba9e4e8f95cbc177f4";
+} from "../thirdweb/8453/0xCF3230acF39e68Ae3DC940ccdFC89759a746b69f";
 
 const Home: NextPage = () => {
 	// contract data

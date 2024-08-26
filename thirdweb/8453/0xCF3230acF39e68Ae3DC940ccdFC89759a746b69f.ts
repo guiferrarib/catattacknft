@@ -1589,7 +1589,7 @@ export function burn(options: BaseTransactionOptions<BurnParams>) {
   return prepareContractCall({
     contract: options.contract,
     method: [
-      "0xf5298aca",
+      "burn",
       [
         {
           internalType: "address",
@@ -1771,6 +1771,7 @@ export function claimKitten(options: BaseTransactionOptions) {
     params: [],
   });
 }
+
 
 /**
  * Represents the parameters for the "lazyMint" function.

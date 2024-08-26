@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
 import { GameContext } from "../contexts/game-context";
-import { contract } from "../utils/constants";
+import { client, contract } from "../utils/constants";
 import { TransactionButton } from "thirdweb/react";
-import { claimKitten } from "../thirdweb/84532/0x5ca3b8e5b82d826af6e8e9ba9e4e8f95cbc177f4";
+import { claimKitten } from "../thirdweb/8453/0xCF3230acF39e68Ae3DC940ccdFC89759a746b69f";
+import { ClaimButton } from "thirdweb/react";
+import { defineChain } from "thirdweb/chains";
 
 const ClaimKittenButton: React.FC = () => {
   const { refetch } = useContext(GameContext);
@@ -10,20 +12,19 @@ const ClaimKittenButton: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <TransactionButton
-        transaction={() =>
-          claimKitten({
-            contract,
-          })
-        }
-        onError={(error) => setError(error)}
-        onClick={() => setError(null)}
-        onTransactionConfirmed={(resut) => {
-          refetch();
-        }}
-      >
-        Claim Kitten
-      </TransactionButton>
+      <ClaimButton
+  contractAddress = {contract.address}
+  chain={defineChain(8453)}
+  client={client}
+  claimParams={{
+    type: "ERC1155",
+    quantity: 1n,
+    tokenId: 0n,
+  }
+  }
+>
+  Claim now
+</ClaimButton>
       {error && (
         <p className="mt-2 text-xs first-letter:capitalize text-red-400 max-w-xs text-center">
           {error.message}

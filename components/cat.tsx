@@ -17,9 +17,12 @@ import { balanceOf } from "thirdweb/extensions/erc1155";
 import { resolveAddress } from "thirdweb/extensions/ens";
 import {
 	attack,
-	burn,
 	safeTransferFrom,
-} from "../thirdweb/84532/0x5ca3b8e5b82d826af6e8e9ba9e4e8f95cbc177f4";
+} from "../thirdweb/8453/0xCF3230acF39e68Ae3DC940ccdFC89759a746b69f";
+import { sendTransaction } from "thirdweb";
+import { burn,isBurnSupported } from "thirdweb/extensions/erc1155";
+import { prepareContractCall } from "thirdweb";
+
 
 type ModalProps = {
 	isOpen: boolean;
@@ -103,6 +106,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, close, level }) => {
 	if (!isOpen) return null;
 
 	const text = modalText[level];
+	const supported = isBurnSupported(["0x2C57B40e1526Cd4732937C04f2716E4ab7eb4Bf3"]);
 
 	return (
 		<div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-10 px-4">
@@ -162,20 +166,28 @@ const Modal: React.FC<ModalProps> = ({ isOpen, close, level }) => {
 									data: "0x",
 								});
 							} else if (level === 2) {
-								tx = burn({
-									contract,
-									account: wallet?.getAccount()?.address || "",
-									amount: 1n,
-									id: 1n,
-								});
+								if (!supported) {
+									throw new Error("Not supported");
+								
+								}else{
+									tx = burn({
+										contract,
+										account: wallet?.getAccount()?.address || "",
+										id: 1n,
+										value: 1n
+									   });
+								}
+								
 							} else if (level === 3) {
-								tx = attack({
+								const resolvedAddress = await resolveAddress({
+									client,
+									name: targetAddress,
+								  });
+								tx = prepareContractCall({
 									contract,
-									victim: await resolveAddress({
-										client,
-										name: targetAddress,
-									}),
-								});
+									method: "function transfer(address to, uint256 value)",
+									params: [resolvedAddress, 1n],
+								  });
 							} else {
 								throw new Error("Invalid level");
 							}

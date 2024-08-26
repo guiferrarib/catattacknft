@@ -34,7 +34,7 @@ const Cats: React.FC = () => {
 	return (
 		<div className="flex flex-col items-center w-full">
 			<h1 className="font-bold sm:text-6xl text-4xl leading-none text-center tracking-tight">
-				Your cats
+				Your Timmy's
 			</h1>
 			<p className="my-4 text-gray-500">
 				<span className="tracking-wide mr-2">Total Points:</span>
